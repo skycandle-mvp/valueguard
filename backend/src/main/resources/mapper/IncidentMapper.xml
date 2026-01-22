@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.valueguard.mapper.IncidentMapper">
+    
+    <resultMap id="IncidentResultMap" type="Incident">
+        <id property="id" column="id"/>
+        <result property="companyName" column="company_name"/>
+        <result property="companyId" column="company_id"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="userId" column="user_id"/>
+        <result property="date" column="date"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <association property="user" javaType="User">
+            <id property="uid" column="user_uid"/>
+            <result property="email" column="user_email"/>
+            <result property="displayName" column="user_display_name"/>
+            <result property="photoURL" column="user_photo_url"/>
+        </association>
+        <collection property="categories" ofType="java.lang.String">
+            <result column="category"/>
+        </collection>
+    </resultMap>
+    
+    <select id="findById" resultMap="IncidentResultMap">
+        SELECT 
+            i.*,
+            ic.category,
+            u.uid as user_uid,
+            u.email as user_email,
+            u.display_name as user_display_name,
+            u.photo_url as user_photo_url
+        FROM incidents i
+        LEFT JOIN incident_categories ic ON i.id = ic.incident_id
+        LEFT JOIN users u ON i.user_id = u.uid
+        WHERE i.id = #{id}
+    </select>
+    
+    <select id="findByCompanyName" resultMap="IncidentResultMap">
+        SELECT 
+            i.*,
+            ic.category,
+            u.uid as user_uid,
+            u.email as user_email,
+            u.display_name as user_display_name,
+            u.photo_url as user_photo_url
+        FROM incidents i
+        LEFT JOIN incident_categories ic ON i.id = ic.incident_id
+        LEFT JOIN users u ON i.user_id = u.uid
+        WHERE LOWER(i.company_name) = LOWER(#{companyName})
+        ORDER BY i.date DESC
+    </select>
+    
+    <select id="searchIncidents" resultMap="IncidentResultMap">
+        SELECT DISTINCT
+            i.*,
+            ic.category,
+            u.uid as user_uid,
+            u.email as user_email,
+            u.display_name as user_display_name,
+            u.photo_url as user_photo_url
+        FROM incidents i
+        LEFT JOIN incident_categories ic ON i.id = ic.incident_id
+        LEFT JOIN users u ON i.user_id = u.uid
+        WHERE LOWER(i.title) LIKE LOWER(CONCAT('%', #{search}, '%'))
+           OR LOWER(i.company_name) LIKE LOWER(CONCAT('%', #{search}, '%'))
+           OR LOWER(ic.category) LIKE LOWER(CONCAT('%', #{search}, '%'))
+        ORDER BY i.date DESC
+    </select>
+    
+    <select id="findAll" resultMap="IncidentResultMap">
+        SELECT 
+            i.*,
+            ic.category,
+            u.uid as user_uid,
+            u.email as user_email,
+            u.display_name as user_display_name,
+            u.photo_url as user_photo_url
+        FROM incidents i
+        LEFT JOIN incident_categories ic ON i.id = ic.incident_id
+        LEFT JOIN users u ON i.user_id = u.uid
+        ORDER BY i.date DESC
+    </select>
+    
+    <select id="countByCompanyName" resultType="long">
+        SELECT COUNT(*) FROM incidents WHERE company_name = #{companyName}
+    </select>
+    
+    <insert id="insert" parameterType="Incident" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO incidents (id, company_name, company_id, title, description, user_id, date, created_at, updated_at)
+        VALUES (#{id}, #{companyName}, #{companyId}, #{title}, #{description}, #{userId}, 
+                COALESCE(#{date}, NOW()), NOW(), NOW())
+    </insert>
+    
+    <insert id="insertCategories">
+        INSERT INTO incident_categories (incident_id, category)
+        VALUES
+        <foreach collection="categories" item="category" separator=",">
+            (#{id}, #{category})
+        </foreach>
+    </insert>
+    
+    <update id="update" parameterType="Incident">
+        UPDATE incidents
+        SET company_name = #{companyName},
+            company_id = #{companyId},
+            title = #{title},
+            description = #{description},
+            user_id = #{userId},
+            date = #{date},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteById">
+        DELETE FROM incidents WHERE id = #{id}
+    </delete>
+    
+    <select id="existsById" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM incidents WHERE id = #{id}
+    </select>
+</mapper>
+

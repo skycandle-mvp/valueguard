@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.valueguard.mapper.CommentMapper">
+    
+    <resultMap id="CommentResultMap" type="Comment">
+        <id property="id" column="id"/>
+        <result property="text" column="text"/>
+        <result property="userId" column="user_id"/>
+        <result property="incidentId" column="incident_id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <association property="user" javaType="User">
+            <id property="uid" column="user_uid"/>
+            <result property="email" column="user_email"/>
+            <result property="displayName" column="user_display_name"/>
+            <result property="photoURL" column="user_photo_url"/>
+        </association>
+    </resultMap>
+    
+    <select id="findById" resultMap="CommentResultMap">
+        SELECT 
+            c.*,
+            u.uid as user_uid,
+            u.email as user_email,
+            u.display_name as user_display_name,
+            u.photo_url as user_photo_url
+        FROM comments c
+        LEFT JOIN users u ON c.user_id = u.uid
+        WHERE c.id = #{id}
+    </select>
+    
+    <select id="findByIncidentId" resultMap="CommentResultMap">
+        SELECT 
+            c.*,
+            u.uid as user_uid,
+            u.email as user_email,
+            u.display_name as user_display_name,
+            u.photo_url as user_photo_url
+        FROM comments c
+        LEFT JOIN users u ON c.user_id = u.uid
+        WHERE c.incident_id = #{incidentId}
+        ORDER BY c.created_at DESC
+    </select>
+    
+    <select id="findByIncidentIdOrderByCreatedAtDesc" resultMap="CommentResultMap">
+        SELECT 
+            c.*,
+            u.uid as user_uid,
+            u.email as user_email,
+            u.display_name as user_display_name,
+            u.photo_url as user_photo_url
+        FROM comments c
+        LEFT JOIN users u ON c.user_id = u.uid
+        WHERE c.incident_id = #{incidentId}
+        ORDER BY c.created_at DESC
+    </select>
+    
+    <insert id="insert" parameterType="Comment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO comments (id, text, user_id, incident_id, created_at, updated_at)
+        VALUES (#{id}, #{text}, #{userId}, #{incidentId}, NOW(), NOW())
+    </insert>
+    
+    <update id="update" parameterType="Comment">
+        UPDATE comments
+        SET text = #{text},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteById">
+        DELETE FROM comments WHERE id = #{id}
+    </delete>
+    
+    <select id="findAll" resultMap="CommentResultMap">
+        SELECT 
+            c.*,
+            u.uid as user_uid,
+            u.email as user_email,
+            u.display_name as user_display_name,
+            u.photo_url as user_photo_url
+        FROM comments c
+        LEFT JOIN users u ON c.user_id = u.uid
+    </select>
+</mapper>
+

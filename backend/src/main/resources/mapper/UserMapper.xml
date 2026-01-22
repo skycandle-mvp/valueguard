@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.valueguard.mapper.UserMapper">
+    
+    <resultMap id="UserResultMap" type="User">
+        <id property="uid" column="uid"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="displayName" column="display_name"/>
+        <result property="photoURL" column="photo_url"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    
+    <select id="findById" resultMap="UserResultMap">
+        SELECT * FROM users WHERE uid = #{uid}
+    </select>
+    
+    <select id="findByEmail" resultMap="UserResultMap">
+        SELECT * FROM users WHERE email = #{email}
+    </select>
+    
+    <select id="findByPhoneNumber" resultMap="UserResultMap">
+        SELECT * FROM users WHERE phone_number = #{phoneNumber}
+    </select>
+    
+    <select id="existsByEmail" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM users WHERE email = #{email}
+    </select>
+    
+    <select id="existsByPhoneNumber" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM users WHERE phone_number = #{phoneNumber}
+    </select>
+    
+    <insert id="insert" parameterType="User">
+        INSERT INTO users (uid, email, password, display_name, photo_url, phone_number, created_at, updated_at)
+        VALUES (#{uid}, #{email}, #{password}, #{displayName}, #{photoURL}, #{phoneNumber}, NOW(), NOW())
+    </insert>
+    
+    <update id="update" parameterType="User">
+        UPDATE users
+        SET email = #{email},
+            password = #{password},
+            display_name = #{displayName},
+            photo_url = #{photoURL},
+            phone_number = #{phoneNumber},
+            updated_at = NOW()
+        WHERE uid = #{uid}
+    </update>
+    
+    <delete id="deleteById">
+        DELETE FROM users WHERE uid = #{uid}
+    </delete>
+    
+    <select id="findAll" resultMap="UserResultMap">
+        SELECT * FROM users
+    </select>
+</mapper>
+

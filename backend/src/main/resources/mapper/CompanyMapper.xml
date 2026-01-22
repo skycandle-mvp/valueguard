@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.valueguard.mapper.CompanyMapper">
+    
+    <resultMap id="CompanyResultMap" type="Company">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="logoUrl" column="logo_url"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    
+    <select id="findById" resultMap="CompanyResultMap">
+        SELECT * FROM companies WHERE id = #{id}
+    </select>
+    
+    <select id="findByNameIgnoreCase" resultMap="CompanyResultMap">
+        SELECT * FROM companies WHERE LOWER(name) = LOWER(#{name})
+    </select>
+    
+    <insert id="insert" parameterType="Company" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO companies (id, name, logo_url, created_at, updated_at)
+        VALUES (#{id}, #{name}, #{logoUrl}, NOW(), NOW())
+    </insert>
+    
+    <update id="update" parameterType="Company">
+        UPDATE companies
+        SET name = #{name},
+            logo_url = #{logoUrl},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteById">
+        DELETE FROM companies WHERE id = #{id}
+    </delete>
+    
+    <select id="findAll" resultMap="CompanyResultMap">
+        SELECT * FROM companies
+    </select>
+</mapper>
+

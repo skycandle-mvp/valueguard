@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: valueguard-backend
+
+  datasource:
+    url: jdbc:mysql://81.70.232.203:3306/valueguard?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: valueguard
+    password: PAxMc7kyJjsdEtdZ
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+jwt:
+  secret: valueguard-secret-key-change-in-production-environment-please-use-a-long-random-string
+  expiration: 86400000 # 24 hours in milliseconds
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.valueguard.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level:
+    com.valueguard: DEBUG
+    org.springframework.security: DEBUG
+    com.valueguard.mapper: DEBUG
+
