@@ -1,0 +1,22 @@
+{
+  "placeholderImages": [
+    {
+      "id": "company-logo-placeholder-1",
+      "description": "Placeholder for a tech company logo",
+      "imageUrl": "https://images.unsplash.com/photo-1760037028517-e5cc6e3ebd3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxsb2dvJTIwdGVjaHxlbnwwfHx8fDE3Njg1ODY3MTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "logo tech"
+    },
+    {
+      "id": "company-logo-placeholder-2",
+      "description": "Placeholder for a finance company logo",
+      "imageUrl": "https://images.unsplash.com/photo-1679676057052-69f07449ea8e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxsb2dvJTIwZmluYW5jZXxlbnwwfHx8fDE3Njg2MTk5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "logo finance"
+    },
+    {
+      "id": "company-logo-placeholder-3",
+      "description": "Placeholder for a retail company logo",
+      "imageUrl": "https://images.unsplash.com/photo-1694843562956-0cc4141b9878?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxsb2dvJTIwcmV0YWlsfGVufDB8fHx8MTc2ODYxOTk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "logo retail"
+    }
+  ]
+}
